@@ -4,10 +4,11 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import ElementUI from 'element-ui';
+import Icon from '@/components/Icon.vue'
+import "vant/lib/index.css";
 Vue.config.productionTip = false
-Vue.use(ElementUI);
 Vue.component('Layout',Layout)
+Vue.component('Icon',Icon)
 new Vue({
   router,
   store,

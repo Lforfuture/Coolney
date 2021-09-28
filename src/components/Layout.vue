@@ -1,7 +1,8 @@
 <template>
   <div class="layout-wrapper">
     <TopMessage />
-    <div class="content" :class="classPrefix && `${classPrefix}-content`">
+    <TabBar/>
+    <div  class="content" :class="classPrefix && `${classPrefix}-content`">
       <slot />
     </div>
   </div>
@@ -10,8 +11,9 @@
 <script lang="ts">
 import Vue from "vue";
 import TopMessage from "@/components/TopMessage.vue"
+import TabBar from '@/components/TabBar.vue';
 import { Component, Prop } from "vue-property-decorator";
-@Component({ components: { TopMessage } })
+@Component({ components: { TopMessage, TabBar } })
 export default class Layout extends Vue {
   @Prop(String) classPrefix?: string;
 }
@@ -21,7 +23,7 @@ export default class Layout extends Vue {
 .layout-wrapper {
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: #e1e1e0;
   height: 100vh;
 }
 .content {

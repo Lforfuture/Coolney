@@ -1,5 +1,5 @@
 <template>
-  <div class="statistics-wrapper">我是统计</div>
+  <Layout></Layout>
 </template>
 
 <script>
