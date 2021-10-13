@@ -1,6 +1,6 @@
 <template>
   <div class="layout-wrapper">
-    <TopMessage />
+    <TopMessage ref="topMessage" />
     <TabBar/>
     <div  class="content" :class="classPrefix && `${classPrefix}-content`">
       <slot />

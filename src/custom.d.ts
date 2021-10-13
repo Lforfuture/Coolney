@@ -1,9 +1,10 @@
-type RecordItem = {
-    selectedTag?: string
+ type RecordItem = {
+    chosenTag?: string
     note?: string
     inOut: string
     amount: number
     time?: string
+    describe?:string
   };
   type Tag = {
     id: number
@@ -15,4 +16,4 @@ type RecordItem = {
     tagsList: Tag[]
     currentTag: Tag
   }
-  
+export {RecordItem, Tag, RootState}

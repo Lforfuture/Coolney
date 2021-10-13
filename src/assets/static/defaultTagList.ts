@@ -7,7 +7,7 @@ const defaultTagsList =
     { id: 6, name: "cosmetics", describe: "美容" },
     { id: 7, name: "medicine", describe: "医疗" },
     { id: 8, name: "trip", describe: "旅游" },
-    { id: 9, name: "phone", describe: "话费" },
+    { id: 9, name: "telephone", describe: "话费" },
     { id: 10, name: "books", describe: "书籍" },
     { id: 11, name: "gift", describe: "礼物" },
     { id: 12, name: "entertainment", describe: "娱乐" },

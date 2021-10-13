@@ -1,16 +1,12 @@
 <template>
   <Layout>
-    <div class="showList">
-      <ul class="dayList">
-        <li class="showItem">
-          <Icon name="trip"></Icon>
-          <span class="describe">旅游</span>
-          <span>99元</span>
-        </li>
-        <li class="showItem">
-          <Icon name="food"></Icon>
-          <span class="describe">用餐</span>
-          <span>77元</span>
+    <div class="show-wrapper">
+      <ul class="showList">
+        <li class="showItem" v-for="(record, index) in monthList" :key="index">
+          <Icon :name="record.chosenTag"></Icon>
+          <span class="describe">{{ record.describe }}</span>
+          <span class="note">{{ record.note }}</span>
+          <span>{{ record.inOut }}{{ record.amount }}</span>
         </li>
       </ul>
     </div>
@@ -18,20 +14,32 @@
   </Layout>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import { RecordItem } from "@/custom";
+import dayjs from "dayjs";
 @Component
-export default class Detals extends Vue {}
+export default class Detals extends Vue {
+  beforeCreate() {
+    this.$store.commit("fetchRecordsList");
+    this.$store.commit("fetchTagsList");
+  }
+  get monthList(): RecordItem[] {
+    return this.$store.state.recordsList.filter((record: RecordItem) => {
+      return dayjs(record.time).format("YYYY-MM") === this.$store.state.currentMonth;
+    });
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-.showList {
+.show-wrapper {
   background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  .dayList {
+  .showList {
     display: flex;
     flex-direction: column;
     .showItem {
@@ -40,9 +48,13 @@ export default class Detals extends Vue {}
       align-items: center;
       padding: 0.5em 1em;
       width: 90vw;
-      .describe{
-        margin-right: auto;
+      .describe {
         margin-left: 1em;
+        margin-right: 1em;
+      }
+      .note {
+        margin-right: auto;
+        color: #3994d1;
       }
       &:not(:first-child) {
         border-top: 1px solid #e6e6e6;

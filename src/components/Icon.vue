@@ -22,6 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 .icon {
+  font-size: 2vh;
   width: 2em;
   height: 2em;
   vertical-align: -0, 15em;

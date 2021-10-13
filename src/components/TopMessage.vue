@@ -8,7 +8,7 @@
         is-link
         icon="calendar-o" 
         arrow-direction="down" 
-        @click="showDatePicker"><div class="date">{{currentDate}}</div>
+        @click="showDatePicker"><div class="date">{{currentMonth}}</div>
       </van-cell>
       <van-popup
         @click-overlay="showDatePicker"
@@ -49,19 +49,20 @@ Vue.use(Cell);
 Vue.use(Popup);
 @Component
 export default class TopMessage extends Vue {
-  currentDate = "";
+  currentMonth = "";
   selectDate = "";
   ifShowDatePicker = false;
   created():void {
-    this.currentDate = dayjs().format('YYYY-MM')
+    this.currentMonth = dayjs().format('YYYY-MM')
+    this.$store.commit("updateCurrentMonth",this.currentMonth)
   }
   changeDate(date:Date):void{
-    this.currentDate = dayjs(date).format("YYYY-MM")
+    this.currentMonth = dayjs(date).format("YYYY-MM")
+    this.$store.commit("updateCurrentMonth",this.currentMonth)
     this.ifShowDatePicker = !this.ifShowDatePicker
   }
   showDatePicker(): void {
     this.ifShowDatePicker = !this.ifShowDatePicker;
-    console.log(this.ifShowDatePicker);
   }
 }
 </script>
