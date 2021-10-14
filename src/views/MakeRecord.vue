@@ -15,7 +15,7 @@
     <NumberPad
       @update:amount="onUpdateAmount"
       @submit="onSubmit"
-      :chosenTag="record.chosenTag"
+      :chosenTag="record.describe"
       class="number-pad"
     ></NumberPad>
   </div>
@@ -35,7 +35,7 @@ import InputForm from "@/components/InputForm.vue";
 export default class MakeRecord extends Vue {
   //账单记录对象，每次更新账单都会将它的深拷贝push进recordList
   record: RecordItem = {
-    chosenTag: "",
+    tagName:"",
     note: "",
     inOut: "-",
     amount: 0,
@@ -50,7 +50,7 @@ export default class MakeRecord extends Vue {
   }
   //监听选择标签
   onChosenTag(tagName: string,describe:string) {
-    this.record.chosenTag = tagName;
+    this.record.tagName = tagName;
     this.record.describe = describe
     console.log(this.record);
   }

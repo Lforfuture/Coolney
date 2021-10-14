@@ -3,7 +3,7 @@
     <div class="show-wrapper">
       <ul class="showList">
         <li class="showItem" v-for="(record, index) in monthList" :key="index">
-          <Icon :name="record.chosenTag"></Icon>
+          <Icon :name="record.tagName"></Icon>
           <span class="describe">{{ record.describe }}</span>
           <span class="note">{{ record.note }}</span>
           <span>{{ record.inOut }}{{ record.amount }}</span>
@@ -25,10 +25,32 @@ export default class Detals extends Vue {
     this.$store.commit("fetchRecordsList");
     this.$store.commit("fetchTagsList");
   }
+  created() {
+   console.log(1) 
+  }
   get monthList(): RecordItem[] {
     return this.$store.state.recordsList.filter((record: RecordItem) => {
-      return dayjs(record.time).format("YYYY-MM") === this.$store.state.currentMonth;
+      return (
+        dayjs(record.time).format("YYYY-MM") === this.$store.state.currentMonth
+      );
     });
+  }
+  get inOut() {
+    return this.monthList.reduce(
+      (result, item) => {
+        if (item.inOut === "+") {
+          result.income += item.amount;
+        } else {
+          result.pay += item.amount;
+        }
+        return result;
+      },
+      { income: 0, pay: 0 }
+    );
+  }
+  mounted() {
+    console.log("1m,detals",this.inOut)
+    this.$store.commit("updateInOut", this.inOut);
   }
 }
 </script>

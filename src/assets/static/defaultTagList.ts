@@ -1,4 +1,4 @@
-const defaultTagsList =
+const defaultPayTagsList =
     [{ id: 1, name: "food", describe: "用餐" },
     { id: 2, name: "cloth", describe: "服饰", },
     { id: 3, name: "house", describe: "居家" },
@@ -15,4 +15,8 @@ const defaultTagsList =
     { id: 14, name: "dog", describe: "宠物" },
     { id: 15, name: "shares", describe: "股票" },
     ]
-export default defaultTagsList
+const defaultIncomeTagsList = [
+    { id: 1, name: "shares", describe: "股票" },
+    { id: 2, name: "income", describe: "工资" },
+]
+export {defaultPayTagsList,defaultIncomeTagsList}

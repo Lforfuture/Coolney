@@ -1,5 +1,5 @@
  type RecordItem = {
-    chosenTag?: string
+    tagName?: string
     note?: string
     inOut: string
     amount: number

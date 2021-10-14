@@ -29,11 +29,11 @@
     <div class="total">
       <div class="total-item">
         <span>收入(￥)</span>
-        <span class="number">99999</span>
+        <span class="number">{{inOut.income}}</span>
       </div>
       <div class="total-item">
         <span>支出(￥)</span>
-        <span class="number">6000</span>
+        <span class="number">{{inOut.pay}}</span>
       </div>
     </div>
   </div>
@@ -52,6 +52,7 @@ export default class TopMessage extends Vue {
   currentMonth = "";
   selectDate = "";
   ifShowDatePicker = false;
+  inOut = this.$store.state.monthInOut
   created():void {
     this.currentMonth = dayjs().format('YYYY-MM')
     this.$store.commit("updateCurrentMonth",this.currentMonth)
