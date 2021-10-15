@@ -1,5 +1,5 @@
 <template>
-  <div class="date-picker">
+  <div class="date-picker-wrapper">
     <van-cell
       id="date-picker"
       icon="calendar-o"
@@ -8,7 +8,7 @@
       arrow-direction="down"
       @click="onShowMonthPicker"
     >
-      <div class="date">{{ currentDate }}</div>
+      <div class="date">{{ currentDateString }}</div>
     </van-cell>
     <van-popup
       @click-overlay="onShowMonthPicker"
@@ -20,14 +20,15 @@
       <van-datetime-picker
         type="year-month"
         title="选择年月"
-        @confirm="onShowDatePicker"
+        @confirm="onMonthConfirm"
         @cancel="onShowMonthPicker"
       />
     </van-popup>
     <van-calendar
+      ref="rili"
       :min-date="minDate"
       :max-date="maxDate"
-      :default-date="defaultDate"
+      :default-date="currentDate"
       v-model="showDatePicker"
       @confirm="onDateConfirm"
     />
@@ -43,29 +44,35 @@ Vue.use(Calendar);
 Vue.use(Icon);
 @Component
 export default class datePicker extends Vue {
-  defaultDate = new Date(); //今天的时间
-  currentDate = ""; //选择的时间
+  currentDateString = ""; //选择的时间
+  currentDate = {} as Date
   showMonthPicker = false;
   showDatePicker = false;
-  minDate = new Date(dayjs().year(), 0, 1);
-  maxDate = new Date(dayjs().year(), 11, 31);
+  ifMonthConfirm =false
+  minDate:Date = new Date;
+  maxDate:Date = new Date;
   created() {
-    this.currentDate = dayjs().format("YYYY-MM-DD");
-  }
-  changeDefaltDate(date: Date): void {
-    this.defaultDate = date;
+    this.currentDate = new Date
+    this.currentDateString = dayjs().format("YYYY-MM-DD");
   }
   onShowMonthPicker(): void {
     this.showMonthPicker = !this.showMonthPicker;
   }
-  onShowDatePicker(date: Date): void {
-    if (date) this.changeDefaltDate(date);
+  onMonthConfirm(date: Date) {
+    this.currentDate = date
+    this.minDate = new Date(dayjs(date).year(), 0, 1);
+    this.maxDate = new Date(dayjs(date).year(), 11, 31);
+    this.onShowDatePicker()
+  }
+  onShowDatePicker(){
     this.showDatePicker = !this.showDatePicker;
   }
   onDateConfirm(date: Date): void {
     this.showDatePicker = !this.showDatePicker;
-    this.currentDate = dayjs(date).format("YYYY-MM-DD");
+    this.currentDateString = dayjs(date).format("YYYY-MM-DD");
+    this.currentDate = date
     this.onShowMonthPicker();
+    this.$emit("updateTime",dayjs(date).format())
   }
 }
 </script>

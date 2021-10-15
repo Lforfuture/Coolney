@@ -1,14 +1,15 @@
 <template>
   <Layout>
     <div class="show-wrapper">
-      <ul class="showList">
-        <li class="showItem" v-for="(record, index) in monthList" :key="index">
-          <Icon :name="record.tagName"></Icon>
-          <span class="describe">{{ record.describe }}</span>
-          <span class="note">{{ record.note }}</span>
-          <span>{{ record.inOut }}{{ record.amount }}</span>
-        </li>
-      </ul>
+      <dl class="showList" v-for="oneDayList in daysList" :key="oneDayList.date">
+        <dt class="date-title"><span>{{oneDayList.date}}</span></dt>
+        <dd class="showItem" v-for="(item,index) in oneDayList.items" :key="index" >
+          <Icon :name="item.tagName"></Icon>
+          <span class="describe">{{ item.describe }}</span>
+          <span class="note">{{ item.note }}</span>
+          <span>{{ item.inOut }}{{ item.amount }}</span>
+        </dd>
+      </dl>
     </div>
     <router-link to="make_record" class="addRecord">记一笔</router-link>
   </Layout>
@@ -35,6 +36,30 @@ export default class Detals extends Vue {
       );
     });
   }
+  get daysList() {
+    type oneDayList = {
+      date:string,
+      pay:number,
+      income:number,
+      items:RecordItem[]
+    }
+    type daysListType = {
+      [key:string]:oneDayList
+    }
+    const {monthList} = this
+    const daysList:daysListType ={}
+    for(let i =0; i<monthList.length; i++){
+      const date = dayjs(monthList[i].time).format('MM-DD')
+      daysList[date] = daysList[date] || {date:date, pay:0, income:0, items:[]}
+      daysList[date].items.push(monthList[i])
+      if(monthList[i].inOut === '-'){
+        daysList[date].pay += monthList[i].amount
+      }else{
+        daysList[date].income += monthList[i].amount
+      }
+    }
+    return daysList
+  }
   get inOut() {
     return this.monthList.reduce(
       (result, item) => {
@@ -49,8 +74,8 @@ export default class Detals extends Vue {
     );
   }
   mounted() {
-    console.log("1m,detals",this.inOut)
     this.$store.commit("updateInOut", this.inOut);
+    console.log(this.daysList)
   }
 }
 </script>
@@ -64,6 +89,17 @@ export default class Detals extends Vue {
   .showList {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+    .date-title{
+      width: 100%;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      font-size: 3vh;
+      color: #fff;
+      background-color: #001938;
+    }
     .showItem {
       display: flex;
       justify-content: space-between;
@@ -78,8 +114,8 @@ export default class Detals extends Vue {
         margin-right: auto;
         color: #3994d1;
       }
-      &:not(:first-child) {
-        border-top: 1px solid #e6e6e6;
+      &:not(:last-child) {
+        border-bottom: 1px solid #e6e6e6;
       }
     }
   }

@@ -5,7 +5,7 @@
         <Icon @click.native="goback" name="left"></Icon>
       </div>
     </div>
-    <DatePicker></DatePicker>
+    <DatePicker @updateTime="onUpdateTime"></DatePicker>
     <TagPicker @update:tab="onTab" @update:chosenTag="onChosenTag"></TagPicker>
     <InputForm
       :formName="'备注'"
@@ -29,6 +29,7 @@ import DatePicker from "@/components/makeRecord/datePicker.vue";
 import TagPicker from "@/components/makeRecord/tagPicker.vue";
 import NumberPad from "@/components/makeRecord/NumberPad.vue";
 import InputForm from "@/components/InputForm.vue";
+import dayjs from "dayjs";
 @Component({
   components: { NumberPad, DatePicker, TagPicker, InputForm },
 })
@@ -40,7 +41,7 @@ export default class MakeRecord extends Vue {
     inOut: "-",
     amount: 0,
     describe:"",
-    time:"",
+    time:dayjs().format()
   };
   created() {
    this.$store.commit("fetchRecordsList") 
@@ -66,7 +67,11 @@ export default class MakeRecord extends Vue {
   onUpdateValue(note: string) {
     this.record.note = note;
   }
+  onUpdateTime(time:string){
+    this.record.time = time
+  }
   onSubmit(){
+    this.record.time
     this.$store.commit("pushRecord",this.record)
   }
 }

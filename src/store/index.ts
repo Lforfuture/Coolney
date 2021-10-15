@@ -76,7 +76,6 @@ export const store = new Vuex.Store({
     },
     pushRecord(state, newRecord: RecordItem) {
       const copyRecord = deepClone(newRecord)
-      copyRecord.time = dayjs().format()
       state.recordsList.push(copyRecord)
       store.commit('saveRecordList', copyRecord)
     },
