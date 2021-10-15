@@ -68,8 +68,8 @@ export default class NumberPad extends Vue {
       this.$emit("update:amount",parseFloat(this.output))
       this.$emit("submit")
       this.output = "0"
+      window.alert("记录成功")
     }
-    window.alert("记录成功")
   }
 }
 </script>
