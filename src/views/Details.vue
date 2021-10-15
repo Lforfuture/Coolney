@@ -2,7 +2,11 @@
   <Layout>
     <div class="show-wrapper">
       <dl class="showList" v-for="oneDayList in daysList" :key="oneDayList.date">
-        <dt class="date-title"><span>{{oneDayList.date}}</span></dt>
+        <dt class="date-title">
+          <span>{{oneDayList.date}}</span>
+          <span class="day-pay">支出 -{{oneDayList.pay}}</span>
+          <span class="day-income">收入 +{{oneDayList.income}}</span>
+          </dt>
         <dd class="showItem" v-for="(item,index) in oneDayList.items" :key="index" >
           <Icon :name="item.tagName"></Icon>
           <span class="describe">{{ item.describe }}</span>
@@ -94,11 +98,18 @@ export default class Detals extends Vue {
     .date-title{
       width: 100%;
       display: flex;
-      justify-content: start;
+      justify-content: space-between;
       align-items: center;
       font-size: 3vh;
       color: #fff;
       background-color: #001938;
+      .day-pay{
+        margin-left: auto;
+        margin-right: 1em;
+      }
+      .day-pay,.day-income{
+        font-size: 2vh;
+      }
     }
     .showItem {
       display: flex;

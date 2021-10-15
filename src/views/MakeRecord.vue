@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { RecordItem, Tag, RootState } from "@/custom";
+import { RecordItem } from "@/custom";
 import DatePicker from "@/components/makeRecord/datePicker.vue";
 import TagPicker from "@/components/makeRecord/tagPicker.vue";
 import NumberPad from "@/components/makeRecord/NumberPad.vue";
