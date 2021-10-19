@@ -2,38 +2,39 @@
   <div class="topMessage-wrapper">
     <div class="title">酷你记账</div>
     <div class="inputItem">
-      <van-cell 
+      <van-cell
         id="picker"
-        center 
+        center
         is-link
-        icon="calendar-o" 
-        arrow-direction="down" 
-        @click="showDatePicker"><div class="date">{{currentMonth}}</div>
+        icon="calendar-o"
+        arrow-direction="down"
+        @click="showMonthPicker"
+        ><div class="month">{{ monthString }}</div>
       </van-cell>
       <van-popup
-        @click-overlay="showDatePicker"
+        @click-overlay="showMonthPicker"
         round
         position="bottom"
         :style="{ height: '30vh' }"
-        v-model="ifShowDatePicker"
+        v-model="ifShowMonthPicker"
       >
         <van-datetime-picker
-          v-model="selectDate"
+          v-model="selectMonth"
           type="year-month"
           title="选择年月"
-          @confirm="changeDate"
-          @cancel="showDatePicker"
+          @confirm="changeMonth"
+          @cancel="showMonthPicker"
         />
-        </van-popup>
+      </van-popup>
     </div>
     <div class="total">
       <div class="total-item">
         <span>收入(￥)</span>
-        <span class="number">{{inOut.income}}</span>
+        <span class="number">{{ inOut.income }}</span>
       </div>
       <div class="total-item">
         <span>支出(￥)</span>
-        <span class="number">{{inOut.pay}}</span>
+        <span class="number">{{ inOut.pay }}</span>
       </div>
     </div>
   </div>
@@ -49,21 +50,27 @@ Vue.use(Cell);
 Vue.use(Popup);
 @Component
 export default class TopMessage extends Vue {
-  currentMonth = "";
-  selectDate = "";
-  ifShowDatePicker = false;
-  inOut = this.$store.state.monthInOut
-  created():void {
-    this.currentMonth = dayjs().format('YYYY-MM')
-    this.$store.commit("updateCurrentMonth",this.currentMonth)
+  beforeCreate() {
+   this.$store.commit('fetchMonthInOut') 
   }
-  changeDate(date:Date):void{
-    this.currentMonth = dayjs(date).format("YYYY-MM")
-    this.$store.commit("updateCurrentMonth",this.currentMonth)
-    this.ifShowDatePicker = !this.ifShowDatePicker
+  get currentMonth() {
+    return this.$store.state.currentMonth;
   }
-  showDatePicker(): void {
-    this.ifShowDatePicker = !this.ifShowDatePicker;
+  get inOut() {
+    return this.$store.state.monthInOut;
+  }
+  selectMonth = this.currentMonth
+  monthString = dayjs(this.selectMonth).format('YYYY-MM')
+  ifShowMonthPicker = false;
+  changeMonth(date: Date): void {
+    this.$store.commit("updateCurrentMonth", date);
+    console.log(this.currentMonth)
+    this.$store.dispatch("fetchMonthInOut")
+    this.monthString = dayjs(this.currentMonth).format('YYYY-MM')  
+    this.ifShowMonthPicker = !this.ifShowMonthPicker;
+  }
+  showMonthPicker(): void {
+    this.ifShowMonthPicker = !this.ifShowMonthPicker;
   }
 }
 </script>
@@ -95,10 +102,10 @@ export default class TopMessage extends Vue {
   color: black;
   width: 100%;
   height: 6vh;
-  .van-icon-calendar-o::before{
-        font-size: 2em;
-    }
-  .date{
+  .van-icon-calendar-o::before {
+    font-size: 2em;
+  }
+  .month {
     width: 100%;
     text-align: center;
     font-size: 16px;

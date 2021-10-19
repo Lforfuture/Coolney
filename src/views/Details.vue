@@ -1,13 +1,21 @@
 <template>
   <Layout>
     <div class="show-wrapper">
-      <dl class="showList" v-for="oneDayList in daysList" :key="oneDayList.date">
+      <dl
+        class="showList"
+        v-for="oneDayList in daysList"
+        :key="oneDayList.date"
+      >
         <dt class="date-title">
-          <span>{{oneDayList.date}}</span>
-          <span class="day-pay">支出 -{{oneDayList.pay}}</span>
-          <span class="day-income">收入 +{{oneDayList.income}}</span>
-          </dt>
-        <dd class="showItem" v-for="(item,index) in oneDayList.items" :key="index" >
+          <span>{{ oneDayList.date }}</span>
+          <span class="day-pay">支出 -{{ oneDayList.pay }}</span>
+          <span class="day-income">收入 +{{ oneDayList.income }}</span>
+        </dt>
+        <dd
+          class="showItem"
+          v-for="(item, index) in oneDayList.items"
+          :key="index"
+        >
           <Icon :name="item.tagName"></Icon>
           <span class="describe">{{ item.describe }}</span>
           <span class="note">{{ item.note }}</span>
@@ -29,57 +37,39 @@ export default class Detals extends Vue {
   beforeCreate() {
     this.$store.commit("fetchRecordsList");
     this.$store.commit("fetchTagsList");
-  }
-  created() {
-   console.log(1) 
+    this.$store.commit('fetchMonthList')
   }
   get monthList(): RecordItem[] {
-    return this.$store.state.recordsList.filter((record: RecordItem) => {
-      return (
-        dayjs(record.time).format("YYYY-MM") === this.$store.state.currentMonth
-      );
-    });
+    return this.$store.state.monthList
   }
   get daysList() {
     type oneDayList = {
-      date:string,
-      pay:number,
-      income:number,
-      items:RecordItem[]
-    }
+      date: string;
+      pay: number;
+      income: number;
+      items: RecordItem[];
+    };
     type daysListType = {
-      [key:string]:oneDayList
-    }
-    const {monthList} = this
-    const daysList:daysListType ={}
-    for(let i =0; i<monthList.length; i++){
-      const date = dayjs(monthList[i].time).format('MM-DD')
-      daysList[date] = daysList[date] || {date:date, pay:0, income:0, items:[]}
-      daysList[date].items.push(monthList[i])
-      if(monthList[i].inOut === '-'){
-        daysList[date].pay += monthList[i].amount
-      }else{
-        daysList[date].income += monthList[i].amount
+      [key: string]: oneDayList;
+    };
+    let { monthList } = this;
+    const daysList: daysListType = {};
+    for (let i = 0; i < monthList.length; i++) {
+      const date = dayjs(monthList[i].time).format("MM-DD");
+      daysList[date] = daysList[date] || {
+        date: date,
+        pay: 0,
+        income: 0,
+        items: [],
+      };
+      daysList[date].items.push(monthList[i]);
+      if (monthList[i].inOut === "-") {
+        daysList[date].pay += monthList[i].amount;
+      } else {
+        daysList[date].income += monthList[i].amount;
       }
     }
-    return daysList
-  }
-  get inOut() {
-    return this.monthList.reduce(
-      (result, item) => {
-        if (item.inOut === "+") {
-          result.income += item.amount;
-        } else {
-          result.pay += item.amount;
-        }
-        return result;
-      },
-      { income: 0, pay: 0 }
-    );
-  }
-  mounted() {
-    this.$store.commit("updateInOut", this.inOut);
-    console.log(this.daysList)
+    return daysList;
   }
 }
 </script>
@@ -95,7 +85,7 @@ export default class Detals extends Vue {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    .date-title{
+    .date-title {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -103,11 +93,12 @@ export default class Detals extends Vue {
       font-size: 3vh;
       color: #fff;
       background-color: #001938;
-      .day-pay{
+      .day-pay {
         margin-left: auto;
         margin-right: 1em;
       }
-      .day-pay,.day-income{
+      .day-pay,
+      .day-income {
         font-size: 2vh;
       }
     }

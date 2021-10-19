@@ -1,10 +1,10 @@
  type RecordItem = {
-    tagName?: string
-    note?: string
+    tagName: string
+    note: string
     inOut: string
     amount: number
-    time?: string
-    describe?:string
+    time: string
+    describe:string
   };
   type Tag = {
     id: number

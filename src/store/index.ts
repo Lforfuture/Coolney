@@ -18,7 +18,8 @@ export const store = new Vuex.Store({
     payTagsList: [] as Tag[],
     incomeTagsList: [] as Tag[],
     recordsList: [] as RecordItem[],
-    currentMonth: "",
+    currentMonth: new Date(),
+    monthList: [] as RecordItem[],
     monthInOut: { income: 0, pay: 0 }
   },
   mutations: {
@@ -40,6 +41,24 @@ export const store = new Vuex.Store({
       } else {
         state.incomeTagsList = defaultIncomeTagsList
       }
+    },
+    fetchMonthList(state) {
+      state.monthList = state.recordsList.filter((record: RecordItem) => {
+        return dayjs(record.time).format("YYYY-MM") === dayjs(state.currentMonth).format("YYYY-MM")
+      })
+    },
+    fetchMonthInOut(state) {
+      state.monthInOut = state.monthList.reduce(
+        (result, item) => {
+          if (item.inOut === "+") {
+            result.income += item.amount;
+          } else {
+            result.pay += item.amount;
+          }
+          return result;
+        },
+        { income: 0, pay: 0 }
+      );
     },
     addPayTag(state, newTag: Tag) {
       const describeArray = state.payTagsList.map(tag => tag.describe)
@@ -66,9 +85,9 @@ export const store = new Vuex.Store({
       window.localStorage.setItem(payTagsListName, JSON.stringify(state.payTagsList))
       window.localStorage.setItem('_MaxPayId', JSON.stringify(state.payTagsList[state.payTagsList.length - 1].id))
     },
-    saveIncomeTagsList(state){
-      window.localStorage.setItem(incomeTagsListName,JSON.stringify(state.incomeTagsList))
-      window.localStorage.setItem('_MaxIncomeId',JSON.stringify(state.incomeTagsList[state.incomeTagsList.length -1].id))
+    saveIncomeTagsList(state) {
+      window.localStorage.setItem(incomeTagsListName, JSON.stringify(state.incomeTagsList))
+      window.localStorage.setItem('_MaxIncomeId', JSON.stringify(state.incomeTagsList[state.incomeTagsList.length - 1].id))
     },
     saveRecordList(state) {
       store.commit('sortRecord')
@@ -86,10 +105,17 @@ export const store = new Vuex.Store({
       state.currentMonth = currentMonth
     },
     updateInOut(state, inOut) {
-      Object.assign(state.monthInOut, inOut)
+      state.monthInOut = inOut
     }
   },
   actions: {
+    fetchMonthList({commit}){
+      commit('fetchMonthList')
+    },
+    async fetchMonthInOut({dispatch,commit}){
+      await dispatch('fetchMonthList')
+      commit('fetchMonthInOut')
+    }
   },
   modules: {
   }

@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout.vue';
+import "default-passive-events";
 import Vue from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'

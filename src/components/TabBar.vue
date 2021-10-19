@@ -18,8 +18,8 @@ export default class TabBar extends Vue {
     .tabBar-wrapper{
         display: flex;
         justify-content: space-around;
-        color: #fff;
-        background-color: #3994d1;
+        color: black;
+        background-color: #fff;
         .link{
             height: 4vh;
             width: 50%;
@@ -28,6 +28,6 @@ export default class TabBar extends Vue {
     }
     .active{
         color: black;
-        background-color: #fff;
+        background-color: #3994d1;
     }
 </style>
